@@ -1,5 +1,6 @@
 package com.devsuperior.dscommerce.entities;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "payments")
-public class Payment {
+public class Payment implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

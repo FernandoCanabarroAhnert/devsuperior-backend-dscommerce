@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.devsuperior.dscommerce.dtos.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -52,6 +53,14 @@ public class Product implements Serializable{
         this.description = description;
         this.price = price;
         this.imgUrl = imgUrl;
+    }
+
+    public Product(ProductDTO dto) {
+        this.id = dto.id();
+        this.name = dto.name();
+        this.description = dto.description();
+        this.price = dto.price();
+        this.imgUrl = dto.imgUrl();
     }
 
     @JsonIgnore

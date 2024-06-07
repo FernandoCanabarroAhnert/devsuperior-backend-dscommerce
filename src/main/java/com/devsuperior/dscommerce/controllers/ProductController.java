@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devsuperior.dscommerce.dtos.ProductDTO;
+import com.devsuperior.dscommerce.dtos.ProductMinDTO;
 import com.devsuperior.dscommerce.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -38,8 +39,8 @@ public class ProductController {
 
     //Ex.:http://localhost:8080/products?size=12&page=1&sort=name,desc
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(name = "name",defaultValue = "") String name,Pageable pageable){
-        Page<ProductDTO> list = service.findAll(name,pageable);
+    public ResponseEntity<Page<ProductMinDTO>> findAll(@RequestParam(name = "name",defaultValue = "") String name,Pageable pageable){
+        Page<ProductMinDTO> list = service.findAll(name,pageable);
         return ResponseEntity.ok(list);
     }
 

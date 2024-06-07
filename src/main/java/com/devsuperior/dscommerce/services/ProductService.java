@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.devsuperior.dscommerce.dtos.CategoryDTO;
 import com.devsuperior.dscommerce.dtos.ProductDTO;
 import com.devsuperior.dscommerce.dtos.ProductMinDTO;
+import com.devsuperior.dscommerce.entities.Category;
 import com.devsuperior.dscommerce.entities.Product;
+import com.devsuperior.dscommerce.repositories.CategoryRepository;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
@@ -22,6 +25,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository repository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id){
@@ -37,8 +43,17 @@ public class ProductService {
 
     @Transactional
     public ProductDTO insert(ProductDTO obj){
-        Product product = repository.save(new Product(obj));
-        return new ProductDTO(product);
+        Product entity = new Product();
+        entity.setName(obj.getName());
+        entity.setDescription(obj.getDescription());
+        entity.setPrice(obj.getPrice());
+        entity.setImgUrl(obj.getImgUrl());
+        for (CategoryDTO c : obj.getCategories()){
+            Category cat = categoryRepository.getReferenceById(c.getId());
+            entity.getCategories().add(cat);
+        }
+        entity = repository.save(entity);
+        return new ProductDTO(entity);
     }
 
     @Transactional
@@ -55,10 +70,17 @@ public class ProductService {
     }
 
     private void updateData(Product entity, ProductDTO obj) {
-        entity.setName(obj.name());
-        entity.setDescription(obj.description());
-        entity.setPrice(obj.price());
-        entity.setImgUrl(obj.imgUrl());
+        entity.setName(obj.getName());
+        entity.setDescription(obj.getDescription());
+        entity.setPrice(obj.getPrice());
+        entity.setImgUrl(obj.getImgUrl());
+        entity.getCategories().clear();
+        for (CategoryDTO c : obj.getCategories()){
+            Category cat = new Category();
+            cat.setId(c.getId());
+            cat.setName(c.getName());
+            entity.getCategories().add(cat);
+        }
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)

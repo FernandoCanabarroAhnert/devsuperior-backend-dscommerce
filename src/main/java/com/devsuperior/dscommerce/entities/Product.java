@@ -56,11 +56,11 @@ public class Product implements Serializable{
     }
 
     public Product(ProductDTO dto) {
-        this.id = dto.id();
-        this.name = dto.name();
-        this.description = dto.description();
-        this.price = dto.price();
-        this.imgUrl = dto.imgUrl();
+        this.id = dto.getId();
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.price = dto.getPrice();
+        this.imgUrl = dto.getImgUrl();
     }
 
     @JsonIgnore

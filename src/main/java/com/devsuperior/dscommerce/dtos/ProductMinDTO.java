@@ -1,6 +1,7 @@
 package com.devsuperior.dscommerce.dtos;
 
 import com.devsuperior.dscommerce.entities.Product;
+import com.devsuperior.dscommerce.projections.ProductMinProjection;
 
 public class ProductMinDTO {
 
@@ -21,6 +22,13 @@ public class ProductMinDTO {
         name = entity.getName();
         price = entity.getPrice();
         imgUrl = entity.getImgUrl();
+    }
+
+    public ProductMinDTO(ProductMinProjection projection){
+        id = projection.getId();
+        name = projection.getName();
+        price = projection.getPrice();
+        imgUrl = projection.getImgUrl();
     }
 
     public Long getId() {

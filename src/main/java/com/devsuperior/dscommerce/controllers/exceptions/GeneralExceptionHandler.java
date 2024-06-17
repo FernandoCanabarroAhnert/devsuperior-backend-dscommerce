@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.devsuperior.dscommerce.dtos.StandardError;
 import com.devsuperior.dscommerce.dtos.ValidationError;
 import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
+import com.devsuperior.dscommerce.services.exceptions.EmailException;
 import com.devsuperior.dscommerce.services.exceptions.ForbiddenException;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 
@@ -53,7 +54,12 @@ public class GeneralExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
-
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<StandardError> email(EmailException e,HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 
     
 

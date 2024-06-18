@@ -44,6 +44,14 @@ public class ProductController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<Page<ProductDTO>> searchProductsWithCategories(@RequestParam(value = "categoryIds",defaultValue = "0") String categoryIds,
+                                                                    @RequestParam(value = "name",defaultValue = "") String name,
+                                                                    Pageable pageable){
+        Page<ProductDTO> list = service.searchProductsWithCategories(categoryIds, name, pageable);
+        return ResponseEntity.ok(list);
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto){

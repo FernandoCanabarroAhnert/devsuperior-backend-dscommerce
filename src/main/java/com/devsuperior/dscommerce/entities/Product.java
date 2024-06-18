@@ -1,11 +1,11 @@
 package com.devsuperior.dscommerce.entities;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.devsuperior.dscommerce.dtos.ProductDTO;
+import com.devsuperior.dscommerce.projections.IdProjection;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
-public class Product implements Serializable{
+public class Product implements IdProjection<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,6 +68,7 @@ public class Product implements Serializable{
         return items.stream().map(OrderItem::getOrder).toList();
     }
 
+    @Override
     public Long getId() {
         return id;
     }

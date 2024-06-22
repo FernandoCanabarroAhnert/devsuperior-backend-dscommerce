@@ -82,6 +82,61 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>${surefire.skip}</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+		<configuration>
+			<excludes>
+			<exclude>com/devsuperior/dscommerce/DscommerceApplication.class</exclude>
+						<exclude>com/devsuperior/dscommerce/config/**</exclude>
+						<exclude>com/devsuperior/dscommerce/entities/**</exclude>
+						<exclude>com/devsuperior/dscommerce/dtos/**</exclude>
+						<exclude>com/devsuperior/dscommerce/controllers/exceptions/**</exclude>
+						<exclude>com/devsuperior/dscommerce/services/exceptions/**</exclude>
+						<exclude>com/devsuperior/dscommerce/services/validations/**</exclude>
+						<exclude>com/devsuperior/dscommerce/controllers/**</exclude>
+						<exclude>com/devsuperior/dscommerce/util/**</exclude>
+			</excludes>
+		</configuration>
+		<executions>
+			<execution>
+				<goals>
+					<goal>prepare-agent</goal>
+				</goals>
+			</execution>
+			<execution>
+				<id>report</id>
+				<phase>prepare-package</phase>
+				<goals>
+					<goal>report</goal>
+				</goals>
+			</execution>
+		</executions>
+		
+		</plugin>
+
 		</plugins>
 	</build>
 

@@ -21,6 +21,11 @@ public class UserUpdateDTO extends UserDTO{
         this.password = password;
     }
 
+    public UserUpdateDTO(User entity) {
+        super(entity);
+        password = entity.getPassword();
+    }
+
     public String getPassword() {
         return password;
     }

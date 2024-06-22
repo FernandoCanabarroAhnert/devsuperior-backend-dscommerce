@@ -21,6 +21,11 @@ public class UserInsertDTO extends UserDTO{
         this.password = password;
     }
 
+    public UserInsertDTO(User entity) {
+        super(entity);
+        password = entity.getPassword();
+    }
+
     public String getPassword() {
         return password;
     }

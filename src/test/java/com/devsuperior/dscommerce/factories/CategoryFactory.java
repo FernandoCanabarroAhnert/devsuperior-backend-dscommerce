@@ -5,6 +5,6 @@ import com.devsuperior.dscommerce.entities.Category;
 public class CategoryFactory {
 
     public static Category CAT(){
-        return new Category(1L,"cat");
+        return new Category(1L,"Livros");
     }
 }

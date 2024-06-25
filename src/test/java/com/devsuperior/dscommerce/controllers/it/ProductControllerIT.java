@@ -107,6 +107,26 @@ public class ProductControllerIT {
     }
 
     @Test
+    public void findByIdShouldReturnHttpStatus200WhenIdExists() throws Exception{
+        mockMvc.perform(get("/products/{id}",existingId)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(23L))
+            .andExpect(jsonPath("$.name").value("PC Gamer Min"))
+            .andExpect(jsonPath("$.price").value(2250.0))
+            .andExpect(jsonPath("$.imgUrl").value("https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/23-big.jpg"))
+            .andExpect(jsonPath("$.categories[0].id").value(3L))
+            .andExpect(jsonPath("$.categories[0].name").value("Computadores"));
+    }
+
+    @Test
+    public void findByIdShouldReturnHttpStatus404WhenIdDoesNotExist() throws Exception{
+        mockMvc.perform(get("/products/{id}",nonExistingId)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void insertShouldReturnHttpStatus401WhenNoUserIsLogged() throws Exception{
         mockMvc.perform(post("/products")
             .content(objectMapper.writeValueAsString(dto))

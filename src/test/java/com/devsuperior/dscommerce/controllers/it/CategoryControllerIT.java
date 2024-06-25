@@ -22,7 +22,7 @@ public class CategoryControllerIT {
     private MockMvc mockMvc;
 
     @Test
-    public void findAllCategoryShouldReturnHttpStatusOkAndAllCategories() throws Exception{
+    public void findAllCategoryShouldReturnHttpStatus200AndAllCategories() throws Exception{
         mockMvc.perform(get("/categories")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -35,7 +35,7 @@ public class CategoryControllerIT {
     }
 
     @Test
-    public void findProductsByCategoryShouldReturnHttpStatusOkAndProducsDTOPaged() throws Exception{
+    public void findProductsByCategoryShouldReturnHttpStatus200AndProducsDTOPaged() throws Exception{
         mockMvc.perform(get("/categories/3/products")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

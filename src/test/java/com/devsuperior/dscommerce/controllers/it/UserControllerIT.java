@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscommerce.dtos.UserInsertDTO;
@@ -75,7 +76,7 @@ public class UserControllerIT {
     }
 
     @Test
-    public void getMeShouldReturnHttpStatus403WhenNoUserIsLogged() throws Exception{
+    public void getMeShouldReturnHttpStatus401WhenNoUserIsLogged() throws Exception{
         mockMvc.perform(get("/users/me")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
@@ -443,11 +444,20 @@ public class UserControllerIT {
     }
 
     @Test
-    public void deleteShouldReturnHttpStatus204WhenAdminIsLoggedAndIdExists() throws Exception{
+    public void deleteShouldReturnHttpStatus204WhenAdminIsLoggedAndIdExistsAndIdIsNotDependent() throws Exception{
         mockMvc.perform(delete("/users/{id}",existingId)
             .header("Authorization", "Bearer " + bearerTokenAdmin)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void deleteShouldReturnHttpStatus400WhenAdminIsLoggedAndIdExistsButIdIsDependent() throws Exception{
+        mockMvc.perform(delete("/users/{id}",existingId)
+            .header("Authorization", "Bearer " + bearerTokenAdmin)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
     }
 
     @Test

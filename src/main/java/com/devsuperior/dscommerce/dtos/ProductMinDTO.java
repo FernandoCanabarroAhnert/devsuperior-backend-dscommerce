@@ -1,9 +1,11 @@
 package com.devsuperior.dscommerce.dtos;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.projections.ProductMinProjection;
 
-public class ProductMinDTO {
+public class ProductMinDTO extends RepresentationModel<ProductMinDTO>{
 
     private Long id;
     private String name;

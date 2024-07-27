@@ -1,8 +1,10 @@
 package com.devsuperior.dscommerce.dtos;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.devsuperior.dscommerce.entities.Category;
 
-public class CategoryDTO {
+public class CategoryDTO extends RepresentationModel<CategoryDTO>{
 
     private Long id;
 

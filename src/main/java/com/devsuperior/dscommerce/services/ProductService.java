@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.devsuperior.dscommerce.controllers.OrderController;
+import com.devsuperior.dscommerce.controllers.ProductController;
 import com.devsuperior.dscommerce.dtos.CategoryDTO;
 import com.devsuperior.dscommerce.dtos.ProductDTO;
 import com.devsuperior.dscommerce.dtos.ProductMinDTO;
@@ -26,6 +28,9 @@ import com.devsuperior.dscommerce.util.Utills;
 
 import jakarta.persistence.EntityNotFoundException;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Service
 public class ProductService {
 
@@ -39,12 +44,18 @@ public class ProductService {
     public ProductDTO findById(Long id){
         Product obj = repository.findById(id).orElseThrow(() ->
         new ResourceNotFoundException(id));
-        return new ProductDTO(obj);
+        return new ProductDTO(obj).add(linkTo(methodOn(ProductController.class).findById(id))
+                .withSelfRel())
+                .add(linkTo(methodOn(OrderController.class).insert(null))
+                .withRel("Adicionar Produto ao Carrinho"));
     }
 
     @Transactional(readOnly = true)
     public Page<ProductMinDTO> findAll(String name,Pageable pageable){
-        return repository.searchByName(name,pageable).map(ProductMinDTO::new);
+        return repository.searchByName(name,pageable).map(x -> new ProductMinDTO(x).
+            add(linkTo(methodOn(ProductController.class).
+            findById(x.getId())).withRel("Consultar Produto por Id"))
+            .add(linkTo(methodOn(ProductController.class).findAll(name, pageable)).withSelfRel()));
     }
 
     @SuppressWarnings("unchecked")
@@ -58,7 +69,11 @@ public class ProductService {
         List<Product> entities = repository.searchProductsWithCategories(productIds);
         entities = (List<Product>) Utills.replace(page.getContent(), entities);
 
-        List<ProductDTO> dtos = entities.stream().map(ProductDTO::new).toList();
+        List<ProductDTO> dtos = entities.stream().map(x -> new ProductDTO(x).
+                add(linkTo(methodOn(ProductController.class).
+                findById(x.getId())).withRel("Consultar Produto por Id"))
+                .add(linkTo(methodOn(ProductController.class).searchProductsWithCategories(categoryIds, name, pageable))
+                .withSelfRel())).toList();
         return new PageImpl<>(dtos,page.getPageable(),page.getTotalElements());
     }
 
